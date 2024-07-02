@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "@colyseus/ws-transport": "^0.15.2",
+    "colyseus": "^0.15.17",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.9",
+    "nodemon": "^3.1.4",
+    "pkg": "^5.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  },
+  "name": "multiserver",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server": "ts-node server.ts",
+    "dev": "nodemon --exec ts-node server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
