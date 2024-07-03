@@ -17,7 +17,7 @@ const colyseus = new Server({
 });
 
 // Main Gateway Lobby
-colyseus.define("Lobby", Lobby);
+colyseus.define("Lobby", Lobby).enableRealtimeListing();
 
 server.listen(port, ()=> {
     console.log(`Server Started on Port ${port}`);
