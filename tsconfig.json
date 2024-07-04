@@ -11,14 +11,14 @@
     // "disableReferencedProjectLoad": true,             /* TypeScript가 자동으로 로드하는 프로젝트 수를 줄입니다. - Reduce the number of projects loaded automatically by TypeScript. */
 
     /* Language and Environment */
-    "target": "es2016",                                  /* 출력된 JavaScript의 언어 버전을 설정하고 호환되는 라이브러리 선언을 포함합니다. - Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "target": "ES6",                                  /* 출력된 JavaScript의 언어 버전을 설정하고 호환되는 라이브러리 선언을 포함합니다. - Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     // "lib": [],                                        /* 대상 런타임 환경을 설명하는 번들 라이브러리 선언 파일을 지정합니다. - Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* 생성된 JSX 코드를 지정합니다. - Specify what JSX code is generated. */
     "experimentalDecorators": true,                      /* 레거시 실험적 데코레이터에 대한 실험적 지원을 활성화합니다. - Enable experimental support for legacy experimental decorators. */
     "emitDecoratorMetadata": true,                    /* 소스 파일의 데코레이터가 있는 선언에 대한 디자인 타입 메타데이터를 출력합니다. - Emit design-type metadata for decorated declarations in source files. */
     // "jsxFactory": "",                                 /* React JSX 출력을 대상으로 할 때 사용하는 JSX 팩토리 함수를 지정합니다. 예: 'React.createElement' 또는 'h' - Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'. */
     // "jsxFragmentFactory": "",                         /* React JSX 출력을 대상으로 할 때 조각에 사용되는 JSX 프래그먼트 참조를 지정합니다. 예: 'React.Fragment' 또는 'Fragment' - Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'. */
-    // "jsxImportSource": "",                            /* 'jsx: react-jsx*'를 사용할 때 JSX 팩토리 함수를 가져오는 데 사용되는 모듈 지정자를 지정합니다. - Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'. */
+    // "jsxImportSource": "",                  /* 'jsx: react-jsx*'를 사용할 때 JSX 팩토리 함수를 가져오는 데 사용되는 모듈 지정자를 지정합니다. - Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'. */
     // "reactNamespace": "",                             /* 'createElement'에 대해 호출되는 객체를 지정합니다. 이는 'react' JSX 출력을 대상으로 할 때만 적용됩니다. - Specify the object invoked for 'createElement'. This only applies when targeting 'react' JSX emit. */
     // "noLib": true,                                    /* 기본 lib.d.ts를 포함하여 모든 라이브러리 파일의 포함을 비활성화합니다. - Disable including any library files, including the default lib.d.ts. */
     // "useDefineForClassFields": true,                  /* ECMAScript 표준을 준수하는 클래스 필드를 출력합니다. - Emit ECMAScript-standard-compliant class fields. */
@@ -44,19 +44,19 @@
     // "noResolve": true,                                /* 'import', 'require' 또는 '<reference>'가 TypeScript가 프로젝트에 추가해야 하는 파일 수를 확장하지 않도록 합니다. - Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project. */
 
     /* JavaScript Support */
-    // "allowJs": true,                                  /* JavaScript 파일이 프로그램의 일부가 될 수 있도록 허용합니다. 'checkJS' 옵션을 사용하여 이러한 파일에서 오류를 가져옵니다. - Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
+    "allowJs": true,                                  /* JavaScript 파일이 프로그램의 일부가 될 수 있도록 허용합니다. 'checkJS' 옵션을 사용하여 이러한 파일에서 오류를 가져옵니다. - Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
     // "checkJs": true,                                  /* 타입 검사가 된 JavaScript 파일에서 오류 보고를 활성화합니다. - Enable error reporting in type-checked JavaScript files. */
     // "maxNodeModuleJsDepth": 1,                        /* 'node_modules'에서 JavaScript 파일을 검사하는 데 사용되는 최대 폴더 깊이를 지정합니다. 'allowJs'에만 적용됩니다. - Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'. */
 
     /* Emit */
-    // "declaration": true,                              /* 프로젝트의 TypeScript 및 JavaScript 파일에서 .d.ts 파일을 생성합니다. - Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    "declaration": true,                              /* 프로젝트의 TypeScript 및 JavaScript 파일에서 .d.ts 파일을 생성합니다. - Generate .d.ts files from TypeScript and JavaScript files in your project. */
     // "declarationMap": true,                           /* .d.ts 파일에 대한 소스 맵을 생성합니다. - Create sourcemaps for d.ts files. */
     // "emitDeclarationOnly": true,                      /* .d.ts 파일만 출력하고 JavaScript 파일은 출력하지 않습니다. - Only output d.ts files and not JavaScript files. */
     "sourceMap": true,                                /* 출력된 JavaScript 파일에 대한 소스 맵 파일을 생성합니다. - Create source map files for emitted JavaScript files. */
     // "inlineSourceMap": true,                          /* 출력된 JavaScript 내부에 소스 맵 파일을 포함합니다. - Include sourcemap files inside the emitted JavaScript. */
     // "outFile": "./",                                  /* 모든 출력을 하나의 JavaScript 파일로 번들링하는 파일을 지정합니다. 'declaration'이 true이면 모든 .d.ts 출력을 번들링하는 파일도 지정합니다. - Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
     "outDir": "./dist",                                   /* 모든 출력 파일에 대한 출력 폴더를 지정합니다. - Specify an output folder for all emitted files. */
-    // "removeComments": true,                           /* 주석 출력을 비활성화합니다. - Disable emitting comments. */
+    "removeComments": true,                           /* 주석 출력을 비활성화합니다. - Disable emitting comments. */
     // "noEmit": true,                                   /* 컴파일에서 파일 출력을 비활성화합니다. - Disable emitting files from a compilation. */
     // "importHelpers": true,                            /* 파일당 포함하는 대신 프로젝트당 한 번씩 tslib에서 헬퍼 함수를 가져올 수 있도록 허용합니다. - Allow importing helper functions from tslib once per project, instead of including them per-file. */
     // "downlevelIteration": true,                       /* 더 적합하지만, 장황하고 성능이 낮은 반복을 위한 JavaScript를 출력합니다. - Emit more compliant, but verbose and less performant JavaScript for iteration. */
