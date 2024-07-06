@@ -3,6 +3,10 @@ import {LobbyState} from "../states/LobbyState";
 import {LobbyService} from "../services/lobby/LobbyService";
 import {LobbyLoginOption} from "../options/lobby/LobbyLoginOption";
 
+export enum LobbyRequest {
+    "CREATE_ACCOUNT" = "CREATE_ACCOUNT"
+}
+
 export enum LobbyResponse {
     "CONNECTED" = "CONNECTED",
     "NOT_AUTHENTICATED" = "NOT_AUTHENTICATED",
