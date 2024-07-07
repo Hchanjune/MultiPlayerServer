@@ -31,7 +31,7 @@ export class LobbyService {
 
     onLogout(client: Client)
     {
-        this.state.clients.delete(client.sessionId);
+        this.state.clients.delete(client.id);
         console.log(`[Lobby] ${client.id} Left The Lobby`);
         console.log(`[Lobby] Currently [${this.state.clients.size}] Users In The Lobby Excluding "${client.id}"`);
     }
