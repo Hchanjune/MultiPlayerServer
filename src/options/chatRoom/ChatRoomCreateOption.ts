@@ -1,3 +1,4 @@
+import {AsyncEventEmitter} from "../../utils/AsyncEventEmitter";
 
 export interface ChatRoomCreateOption {
     roomName: string;
@@ -5,4 +6,5 @@ export interface ChatRoomCreateOption {
     maxClients: number;
     isPrivate: boolean;
     password: string;
+    eventEmitter: AsyncEventEmitter;
 }

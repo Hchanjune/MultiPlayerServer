@@ -15,7 +15,7 @@
     // "lib": [],                                        /* 대상 런타임 환경을 설명하는 번들 라이브러리 선언 파일을 지정합니다. - Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* 생성된 JSX 코드를 지정합니다. - Specify what JSX code is generated. */
     "experimentalDecorators": true,                      /* 레거시 실험적 데코레이터에 대한 실험적 지원을 활성화합니다. - Enable experimental support for legacy experimental decorators. */
-    "emitDecoratorMetadata": true,                    /* 소스 파일의 데코레이터가 있는 선언에 대한 디자인 타입 메타데이터를 출력합니다. - Emit design-type metadata for decorated declarations in source files. */
+    // "emitDecoratorMetadata": true,                    /* 소스 파일의 데코레이터가 있는 선언에 대한 디자인 타입 메타데이터를 출력합니다. - Emit design-type metadata for decorated declarations in source files. */
     // "jsxFactory": "",                                 /* React JSX 출력을 대상으로 할 때 사용하는 JSX 팩토리 함수를 지정합니다. 예: 'React.createElement' 또는 'h' - Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'. */
     // "jsxFragmentFactory": "",                         /* React JSX 출력을 대상으로 할 때 조각에 사용되는 JSX 프래그먼트 참조를 지정합니다. 예: 'React.Fragment' 또는 'Fragment' - Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'. */
     // "jsxImportSource": "",                  /* 'jsx: react-jsx*'를 사용할 때 JSX 팩토리 함수를 가져오는 데 사용되는 모듈 지정자를 지정합니다. - Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'. */

@@ -4,10 +4,12 @@ import {ChatRoomPlayer} from "../chatRoom/ChatRoomPlayer";
 export class ChatRoomInfo extends Schema {
 
     @type("string")
+    roomId = "";
+    @type("string")
     roomName = "";
     @type("string")
     roomOwner = "";
-    @type("number")
+    @type("uint8")
     maxClients = 10;
     @type("boolean")
     isPrivate = false;

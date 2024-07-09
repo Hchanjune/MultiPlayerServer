@@ -12,13 +12,4 @@ export class LobbyState extends Schema {
     chatRooms = new MapSchema<ChatRoomInfo>();
 
 
-
-
-
-
-
-
-
-
-
 }
