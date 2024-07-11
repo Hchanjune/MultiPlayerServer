@@ -89,7 +89,7 @@ export class LobbyService {
             }
 
             // 클라이언트 세션 ID로 시트 예약
-            const seatReservation = await matchMaker.joinById(options.roomId, { sessionId: client.sessionId });
+            const seatReservation = await matchMaker.joinById(options.roomId, this.state.clients.get(client.sessionId));
 
             client.send(LobbyResponse.CHAT_ROOM_AUTHORIZED, seatReservation);
         } catch (error) {
@@ -99,7 +99,16 @@ export class LobbyService {
     }
 
     onChatRoomUpdate(chatRoomInfo: ChatRoomInfo) {
+/*        const chatRoom = this.state.chatRooms.get(chatRoomInfo.roomId)!;
+        chatRoom.roomName = chatRoomInfo.roomName;
+        chatRoom.roomOwner = chatRoomInfo.roomOwner;
+        chatRoom.maxClients = chatRoomInfo.maxClients;
+        chatRoom.isPrivate = chatRoomInfo.isPrivate;
+        chatRoom.password = chatRoomInfo.password;
+        chatRoom.players = chatRoomInfo.players;
+        chatRoom.isPlaying = chatRoomInfo.isPlaying;*/
         this.state.chatRooms.set(chatRoomInfo.roomId, chatRoomInfo);
+        console.log(`[Lobby] ChatRoom(${chatRoomInfo.roomId}) Updated`);
     }
 
     onChatRoomDispose(roomId: string) {

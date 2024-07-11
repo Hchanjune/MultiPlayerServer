@@ -1,13 +1,8 @@
 import {Schema, type} from "@colyseus/schema";
 
 export class ChatRoomPlayer extends Schema {
-
-    @type("string")
-    lobbySessionId = "";
-    @type("string")
-    sessionId = "";
-    @type("string")
-    id = "";
-    @type("string")
-    name = "";
+    @type("string") lobbySessionId: string = "";
+    @type("string") sessionId: string = "";
+    @type("string") id: string = "";
+    @type("string") name: string = "";
 }
