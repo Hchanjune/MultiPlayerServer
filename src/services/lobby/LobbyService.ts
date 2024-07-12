@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {LobbyState} from "../../states/LobbyState";
 import {Client, matchMaker} from "colyseus";
 import {LobbyLoginOption} from "../../options/lobby/LobbyLoginOption";
@@ -7,6 +8,8 @@ import {ChatRoomCreateOption} from "../../options/chatRoom/ChatRoomCreateOption"
 import {ChatRoom} from "../../rooms/ChatRoom";
 import {ChatRoomInfo} from "../../schemas/globals/ChatRoomInfo";
 import {AsyncEventEmitter} from "../../utils/AsyncEventEmitter";
+import {MapSchema} from "@colyseus/schema";
+import {ChatRoomPlayer} from "../../schemas/chatRoom/ChatRoomPlayer";
 
 
 export class LobbyService {
@@ -55,6 +58,7 @@ export class LobbyService {
                 return;
             }
             option.eventEmitter = this.eventEmitter;
+            option.lobbyState = this.state;
             const chatRoom = await matchMaker.createRoom('ChatRoom', option);
             let chatRoomInfo = new ChatRoomInfo();
             chatRoomInfo.roomId = chatRoom.roomId;
@@ -99,22 +103,31 @@ export class LobbyService {
     }
 
     onChatRoomUpdate(chatRoomInfo: ChatRoomInfo) {
-/*        const chatRoom = this.state.chatRooms.get(chatRoomInfo.roomId)!;
-        chatRoom.roomName = chatRoomInfo.roomName;
-        chatRoom.roomOwner = chatRoomInfo.roomOwner;
-        chatRoom.maxClients = chatRoomInfo.maxClients;
-        chatRoom.isPrivate = chatRoomInfo.isPrivate;
-        chatRoom.password = chatRoomInfo.password;
-        chatRoom.players = chatRoomInfo.players;
-        chatRoom.isPlaying = chatRoomInfo.isPlaying;*/
-        this.state.chatRooms.set(chatRoomInfo.roomId, chatRoomInfo);
-        console.log(`[Lobby] ChatRoom(${chatRoomInfo.roomId}) Updated`);
+        if (this.state.chatRooms.has(chatRoomInfo.roomId)) {
+            let chatRoom = this.state.chatRooms.get(chatRoomInfo.roomId)!;
+            chatRoom.roomName = chatRoomInfo.roomName;
+            chatRoom.roomOwner = chatRoomInfo.roomOwner;
+            chatRoom.maxClients = chatRoomInfo.maxClients;
+            chatRoom.isPrivate = chatRoomInfo.isPrivate;
+            chatRoom.password = chatRoomInfo.password;
+            chatRoom.players = chatRoomInfo.players;
+            chatRoom.isPlaying = chatRoomInfo.isPlaying;
+
+            console.log(`[Lobby] ChatRoom(${chatRoomInfo.roomId}) Updated`);
+            //console.log(JSON.stringify(chatRoom, null, 2));
+        } else {
+            console.log(`[Lobby] ChatRoom(${chatRoomInfo.roomId}) Does Not Exist`);
+        }
     }
 
     onChatRoomDispose(roomId: string) {
-        this.state.chatRooms.delete(roomId);
-        console.log(`[Lobby] ChatRoom(${roomId}) Disposed`);
-        console.log(`[Lobby] Currently [${this.state.chatRooms.size}] ChatRoom Active In The Lobby`);
+        if (this.state.chatRooms.has(roomId)) {
+            this.state.chatRooms.delete(roomId);
+            console.log(`[Lobby] ChatRoom(${roomId}) Disposed`);
+            console.log(`[Lobby] Currently [${this.state.chatRooms.size}] ChatRoom Active In The Lobby`);
+        } else {
+            console.error(`[Lobby] ChatRoom(${roomId}) Does Not Exist`);
+        }
     }
 
 }

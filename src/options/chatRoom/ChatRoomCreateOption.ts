@@ -1,4 +1,5 @@
 import {AsyncEventEmitter} from "../../utils/AsyncEventEmitter";
+import {LobbyState} from "../../states/LobbyState";
 
 export interface ChatRoomCreateOption {
     roomName: string;
@@ -7,4 +8,5 @@ export interface ChatRoomCreateOption {
     isPrivate: boolean;
     password: string;
     eventEmitter: AsyncEventEmitter;
+    lobbyState: LobbyState;
 }

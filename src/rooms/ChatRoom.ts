@@ -1,4 +1,4 @@
-import {Client, Room} from "colyseus";
+import {Client, matchMaker, Room} from "colyseus";
 import {ChatRoomState} from "../states/ChatRoomState";
 import {ChatRoomCreateOption} from "../options/chatRoom/ChatRoomCreateOption";
 import {ChatRoomService} from "../services/chatRoom/ChatRoomService";
@@ -47,7 +47,7 @@ export class ChatRoom extends Room<ChatRoomState> {
         this.chatRoomService.onLeave(client);
     }
 
-    onDispose() {
+    async onDispose() {
         this.chatRoomService.onDispose();
     }
 

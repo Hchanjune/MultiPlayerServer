@@ -51,6 +51,7 @@ export class Lobby extends Room<LobbyState> {
         });
 
         this.eventEmitter.on(LobbyEvent.CHAT_ROOM_DISPOSED, (roomId: string) => {
+            console.log(`[Lobby] Received Event of type ${LobbyEvent.CHAT_ROOM_DISPOSED}`);
             this.lobbyService.onChatRoomDispose(roomId);
         });
 
