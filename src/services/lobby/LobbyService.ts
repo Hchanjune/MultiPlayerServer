@@ -3,17 +3,24 @@ import {LobbyState} from "../../states/LobbyState";
 import {Client, matchMaker} from "colyseus";
 import {LobbyLoginOption} from "../../options/lobby/LobbyLoginOption";
 import {ClientInfo} from "../../schemas/globals/ClientInfo";
-import {LobbyResponse} from "../../rooms/Lobby";
+import {Lobby, LobbyResponse} from "../../rooms/Lobby";
 import {ChatRoomCreateOption} from "../../options/chatRoom/ChatRoomCreateOption";
 import {ChatRoom} from "../../rooms/ChatRoom";
 import {ChatRoomInfo} from "../../schemas/globals/ChatRoomInfo";
 import {AsyncEventEmitter} from "../../utils/AsyncEventEmitter";
-import {MapSchema} from "@colyseus/schema";
-import {ChatRoomPlayer} from "../../schemas/chatRoom/ChatRoomPlayer";
 
 
 export class LobbyService {
-    constructor(private state: LobbyState, private eventEmitter: AsyncEventEmitter) {}
+
+    private room: Lobby;
+    private state: LobbyState;
+    private eventEmitter: AsyncEventEmitter;
+
+    constructor(private lobby: Lobby) {
+        this.room = lobby;
+        this.state = lobby.state;
+        this.eventEmitter = lobby.eventEmitter;
+    }
 
 
     onLogin(client: Client, loginOption: LobbyLoginOption){
@@ -57,8 +64,7 @@ export class LobbyService {
                 client.send(LobbyResponse.ERROR_MESSAGE, "유효하지 않은 요청입니다.");
                 return;
             }
-            option.eventEmitter = this.eventEmitter;
-            option.lobbyState = this.state;
+            option.lobby = this.lobby;
             const chatRoom = await matchMaker.createRoom('ChatRoom', option);
             let chatRoomInfo = new ChatRoomInfo();
             chatRoomInfo.roomId = chatRoom.roomId;

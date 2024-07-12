@@ -32,13 +32,13 @@ export enum LobbyResponse {
 export class Lobby extends Room<LobbyState> {
 
     private lobbyService: LobbyService;
-    private eventEmitter: AsyncEventEmitter;
+    public eventEmitter: AsyncEventEmitter;
 
     constructor() {
         super();
         this.setState(new LobbyState());
         this.eventEmitter = new AsyncEventEmitter();
-        this.lobbyService = new LobbyService(this.state, this.eventEmitter);
+        this.lobbyService = new LobbyService(this);
 
         this.onMessage("*", (client, type, message) => {
             this.handleMessage(client, type as LobbyRequest, message);

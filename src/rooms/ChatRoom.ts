@@ -22,7 +22,7 @@ export class ChatRoom extends Room<ChatRoomState> {
     }
 
      onCreate(createOptions: ChatRoomCreateOption) {
-        this.chatRoomService = new ChatRoomService(this, this.state);
+        this.chatRoomService = new ChatRoomService(this, createOptions.lobby);
         this.chatRoomService.onCreate(createOptions);
 
         this.onMessage("*", (client, type, message) => {
