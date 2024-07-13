@@ -73,7 +73,7 @@ export class LobbyService {
             chatRoomInfo.maxClients = option.maxClients;
             chatRoomInfo.isPrivate = option.isPrivate;
             chatRoomInfo.password = option.isPrivate ? option.password : "";
-            this.state.chatRooms.set(chatRoom.roomId, chatRoomInfo);
+            //this.state.chatRooms.set(chatRoom.roomId, chatRoomInfo);
             const seatReservation = await matchMaker.joinById(chatRoom.roomId, this.state.clients.get(client.sessionId));
             client.send(LobbyResponse.CHAT_ROOM_CREATED, seatReservation);
         } catch (error: any) {

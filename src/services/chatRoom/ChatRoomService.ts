@@ -18,7 +18,7 @@ export class ChatRoomService {
     private lobbyState: LobbyState;
     private lobbyEventEmitter!: AsyncEventEmitter;
 
-    constructor(private chatRoom: ChatRoom, private lobby: Lobby) {
+    constructor(chatRoom: ChatRoom, lobby: Lobby) {
         this.chatRoom = chatRoom;
         this.state = chatRoom.state;
         this.lobby = lobby;
@@ -34,6 +34,8 @@ export class ChatRoomService {
         this.chatRoom.maxClients = this.state.maxClients;
         this.state.isPrivate = createOptions.isPrivate;
         this.state.password = createOptions.password;
+
+        this.lobbyState.chatRooms.set(this.chatRoom.roomId, this.state);
         console.log(`[ChatRoom: ${this.state.roomName}(${this.chatRoom.roomId})] Created`);
     }
 
@@ -46,8 +48,8 @@ export class ChatRoomService {
         this.state.players.set(chatRoomPlayer.sessionId, chatRoomPlayer);
         //client.send(ChatRoomResponse.CHAT_ROOM_JOINED);
         console.log(`[ChatRoom: ${this.state.roomName}(${this.chatRoom.roomId})] ${chatRoomPlayer.id}(${chatRoomPlayer.lobbySessionId})(${client.sessionId}) Joined - Currently [${this.state.players.size}] Player In The Room`);
-        //this.refreshRoomState();
-        this.lobbyState.chatRooms.get(this.chatRoom.roomId)!.players.set(chatRoomPlayer.sessionId, chatRoomPlayer);
+        this.refreshRoomState();
+        //this.lobbyState.chatRooms.get(this.chatRoom.roomId)!.players.set(chatRoomPlayer.sessionId, chatRoomPlayer);
     }
 
     onLeave(client: Client) {
@@ -59,12 +61,12 @@ export class ChatRoomService {
         if (this.state.roomOwner === chatRoomPlayer.id && this.state.players.size > 0) {
             let remainingPlayers = Array.from(this.state.players.values());
             this.state.roomOwner = remainingPlayers[0].id; // 첫 번째 남아 있는 플레이어에게 방장 넘김
-            this.lobbyState.chatRooms.get(this.chatRoom.roomId)!.roomOwner = remainingPlayers[0].id;
+            //this.lobbyState.chatRooms.get(this.chatRoom.roomId)!.roomOwner = remainingPlayers[0].id;
             console.log(`[ChatRoom: ${this.state.roomName}(${this.chatRoom.roomId})] OwnerChanged "${this.state.roomOwner}"`);
         }
 
-        //this.refreshRoomState();
-        this.lobbyState.chatRooms.get(this.chatRoom.roomId)!.players.delete(client.sessionId);
+        this.refreshRoomState();
+        //this.lobbyState.chatRooms.get(this.chatRoom.roomId)!.players.delete(client.sessionId);
     }
 
     onDispose() {
@@ -74,7 +76,8 @@ export class ChatRoomService {
 
 
     private refreshRoomState() {
-        this.lobbyEventEmitter.emit(LobbyEvent.CHAT_ROOM_UPDATED, this.getRoomState());
+        //this.lobbyEventEmitter.emit(LobbyEvent.CHAT_ROOM_UPDATED, this.getRoomState());
+        this.lobby.broadcastPatch();
     }
 
     private getRoomState(): ChatRoomInfo {
