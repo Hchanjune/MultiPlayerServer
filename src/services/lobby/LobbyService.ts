@@ -6,19 +6,16 @@ import {ClientInfo} from "../../schemas/globals/ClientInfo";
 import {Lobby, LobbyResponse} from "../../rooms/Lobby";
 import {ChatRoomCreateOption} from "../../options/chatRoom/ChatRoomCreateOption";
 import {ChatRoom} from "../../rooms/ChatRoom";
-import {AsyncEventEmitter} from "../../utils/AsyncEventEmitter";
 
 
 export class LobbyService {
 
     private room: Lobby;
     private state: LobbyState;
-    private eventEmitter: AsyncEventEmitter;
 
     constructor(private lobby: Lobby) {
         this.room = lobby;
         this.state = lobby.state;
-        this.eventEmitter = lobby.eventEmitter;
     }
 
 

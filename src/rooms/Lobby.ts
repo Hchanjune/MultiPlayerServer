@@ -2,13 +2,6 @@ import {Client, Room} from "colyseus";
 import {LobbyState} from "../states/LobbyState";
 import {LobbyService} from "../services/lobby/LobbyService";
 import {LobbyLoginOption} from "../options/lobby/LobbyLoginOption";
-import {AsyncEventEmitter} from "../utils/AsyncEventEmitter";
-
-export enum LobbyEvent {
-    GET_CLIENT_INFO = "GET_CLIENT_INFO",
-    CHAT_ROOM_UPDATED = "CHAT_ROOM_UPDATED",
-    CHAT_ROOM_DISPOSED = "CHAT_ROOM_DISPOSED",
-}
 
 export enum LobbyRequest {
     CREATE_ACCOUNT = "CREATE_ACCOUNT",
@@ -31,31 +24,14 @@ export enum LobbyResponse {
 export class Lobby extends Room<LobbyState> {
 
     private lobbyService: LobbyService;
-    public eventEmitter: AsyncEventEmitter;
 
     constructor() {
         super();
         this.setState(new LobbyState());
-        this.eventEmitter = new AsyncEventEmitter();
         this.lobbyService = new LobbyService(this);
 
         this.onMessage("*", (client, type, message) => {
             this.handleMessage(client, type as LobbyRequest, message);
-        });
-
-        this.eventEmitter.on(LobbyEvent.GET_CLIENT_INFO, async (sessionId: string, resolve: Function) => {
-            console.log(`[Lobby] Received Event of type ${LobbyEvent.GET_CLIENT_INFO}`);
-            const clientInfo = await this.lobbyService.returnClientInfo(sessionId);
-            resolve(clientInfo);
-        });
-
-        this.eventEmitter.on(LobbyEvent.CHAT_ROOM_DISPOSED, (roomId: string) => {
-            console.log(`[Lobby] Received Event of type ${LobbyEvent.CHAT_ROOM_DISPOSED}`);
-            this.lobbyService.onChatRoomDispose(roomId);
-        });
-
-        this.eventEmitter.on(LobbyEvent.CHAT_ROOM_UPDATED, () => {
-            //this.lobbyService.onChatRoomUpdate(chatRoomInfo);
         });
     }
 
