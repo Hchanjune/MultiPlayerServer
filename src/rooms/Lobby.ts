@@ -3,7 +3,6 @@ import {LobbyState} from "../states/LobbyState";
 import {LobbyService} from "../services/lobby/LobbyService";
 import {LobbyLoginOption} from "../options/lobby/LobbyLoginOption";
 import {AsyncEventEmitter} from "../utils/AsyncEventEmitter";
-import {ChatRoomInfo} from "../schemas/globals/ChatRoomInfo";
 
 export enum LobbyEvent {
     GET_CLIENT_INFO = "GET_CLIENT_INFO",
@@ -55,8 +54,8 @@ export class Lobby extends Room<LobbyState> {
             this.lobbyService.onChatRoomDispose(roomId);
         });
 
-        this.eventEmitter.on(LobbyEvent.CHAT_ROOM_UPDATED, (chatRoomInfo: ChatRoomInfo) => {
-            this.lobbyService.onChatRoomUpdate(chatRoomInfo);
+        this.eventEmitter.on(LobbyEvent.CHAT_ROOM_UPDATED, () => {
+            //this.lobbyService.onChatRoomUpdate(chatRoomInfo);
         });
     }
 

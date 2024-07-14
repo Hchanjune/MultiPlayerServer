@@ -6,7 +6,6 @@ import {ClientInfo} from "../../schemas/globals/ClientInfo";
 import {Lobby, LobbyResponse} from "../../rooms/Lobby";
 import {ChatRoomCreateOption} from "../../options/chatRoom/ChatRoomCreateOption";
 import {ChatRoom} from "../../rooms/ChatRoom";
-import {ChatRoomInfo} from "../../schemas/globals/ChatRoomInfo";
 import {AsyncEventEmitter} from "../../utils/AsyncEventEmitter";
 
 
@@ -66,14 +65,6 @@ export class LobbyService {
             }
             option.lobby = this.lobby;
             const chatRoom = await matchMaker.createRoom('ChatRoom', option);
-            let chatRoomInfo = new ChatRoomInfo();
-            chatRoomInfo.roomId = chatRoom.roomId;
-            chatRoomInfo.roomName = option.roomName;
-            chatRoomInfo.roomOwner = option.initialOwner;
-            chatRoomInfo.maxClients = option.maxClients;
-            chatRoomInfo.isPrivate = option.isPrivate;
-            chatRoomInfo.password = option.isPrivate ? option.password : "";
-            //this.state.chatRooms.set(chatRoom.roomId, chatRoomInfo);
             const seatReservation = await matchMaker.joinById(chatRoom.roomId, this.state.clients.get(client.sessionId));
             client.send(LobbyResponse.CHAT_ROOM_CREATED, seatReservation);
         } catch (error: any) {
@@ -108,23 +99,6 @@ export class LobbyService {
         }
     }
 
-    onChatRoomUpdate(chatRoomInfo: ChatRoomInfo) {
-        if (this.state.chatRooms.has(chatRoomInfo.roomId)) {
-            let chatRoom = this.state.chatRooms.get(chatRoomInfo.roomId)!;
-            chatRoom.roomName = chatRoomInfo.roomName;
-            chatRoom.roomOwner = chatRoomInfo.roomOwner;
-            chatRoom.maxClients = chatRoomInfo.maxClients;
-            chatRoom.isPrivate = chatRoomInfo.isPrivate;
-            chatRoom.password = chatRoomInfo.password;
-            chatRoom.players = chatRoomInfo.players;
-            chatRoom.isPlaying = chatRoomInfo.isPlaying;
-
-            console.log(`[Lobby] ChatRoom(${chatRoomInfo.roomId}) Updated`);
-            //console.log(JSON.stringify(chatRoom, null, 2));
-        } else {
-            console.log(`[Lobby] ChatRoom(${chatRoomInfo.roomId}) Does Not Exist`);
-        }
-    }
 
     onChatRoomDispose(roomId: string) {
         if (this.state.chatRooms.has(roomId)) {

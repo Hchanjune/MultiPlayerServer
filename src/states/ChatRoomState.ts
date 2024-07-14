@@ -1,6 +1,5 @@
 import {MapSchema, Schema, type} from "@colyseus/schema";
 import {ChatRoomPlayer} from "../schemas/chatRoom/ChatRoomPlayer";
-import {ChatRoomInfo} from "../schemas/globals/ChatRoomInfo";
 
 
 export class ChatRoomState extends Schema {

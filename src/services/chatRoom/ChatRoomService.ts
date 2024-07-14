@@ -6,7 +6,6 @@ import {AsyncEventEmitter} from "../../utils/AsyncEventEmitter";
 import {ChatRoom, ChatRoomResponse} from "../../rooms/ChatRoom";
 import {ClientInfo} from "../../schemas/globals/ClientInfo";
 import {ChatRoomPlayer} from "../../schemas/chatRoom/ChatRoomPlayer";
-import {ChatRoomInfo} from "../../schemas/globals/ChatRoomInfo";
 import {LobbyState} from "../../states/LobbyState";
 
 
@@ -78,20 +77,6 @@ export class ChatRoomService {
     private refreshRoomState() {
         //this.lobbyEventEmitter.emit(LobbyEvent.CHAT_ROOM_UPDATED, this.getRoomState());
         this.lobby.broadcastPatch();
-    }
-
-    private getRoomState(): ChatRoomInfo {
-        let chatRoomInfo = new ChatRoomInfo();
-        chatRoomInfo.roomId = this.state.roomId;
-        chatRoomInfo.roomName = this.state.roomName;
-        chatRoomInfo.roomOwner = this.state.roomOwner;
-        chatRoomInfo.maxClients = this.state.maxClients;
-        chatRoomInfo.isPrivate = this.state.isPrivate;
-        chatRoomInfo.password = chatRoomInfo.isPrivate ? this.state.password : "";
-        chatRoomInfo.players = this.state.players;
-        chatRoomInfo.isPlaying = this.state.isPlaying;
-        //console.log(JSON.stringify(chatRoomInfo, null, 2));
-        return chatRoomInfo;
     }
 
 }
