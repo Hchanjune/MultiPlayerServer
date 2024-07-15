@@ -6,6 +6,7 @@ import {ClientInfo} from "../../schemas/globals/ClientInfo";
 import {Lobby, LobbyResponse} from "../../rooms/Lobby";
 import {ChatRoomCreateOption} from "../../options/chatRoom/ChatRoomCreateOption";
 import {ChatRoom} from "../../rooms/ChatRoom";
+import {ChatRoomState} from "../../states/ChatRoomState";
 
 
 export class LobbyService {
@@ -46,10 +47,6 @@ export class LobbyService {
         console.log(`[Lobby] ${client.id}(${client.sessionId}) Left The Lobby`);
         console.log(`[Lobby] Currently [${this.state.clients.size}] Users In The Lobby Excluding "${client.id}(${client.sessionId})"`);
         console.log(`[Lobby] Currently [${this.state.chatRooms.size}] ChatRoom Active In The Lobby`);
-    }
-
-    async returnClientInfo(sessionId: string): Promise<ClientInfo> {
-        return this.state.clients.get(sessionId)!!;
     }
 
     async onCreateChatRoom(client: Client, option: ChatRoomCreateOption) {

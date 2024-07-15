@@ -3,6 +3,7 @@ import {ChatRoomState} from "../states/ChatRoomState";
 import {ChatRoomCreateOption} from "../options/chatRoom/ChatRoomCreateOption";
 import {ChatRoomService} from "../services/chatRoom/ChatRoomService";
 import EventEmitter from "node:events";
+import {ChatRoomPlayer} from "../schemas/chatRoom/ChatRoomPlayer";
 
 export enum ChatRoomRequest {
     OPTION_CONFIG = "OPTION_CONFIG",
@@ -16,18 +17,15 @@ export class ChatRoom extends Room<ChatRoomState> {
 
     private chatRoomService!: ChatRoomService;
 
-    constructor() {
-        super();
-        this.setState(new ChatRoomState());
-    }
-
      onCreate(createOptions: ChatRoomCreateOption) {
-        this.chatRoomService = new ChatRoomService(this, createOptions.lobby);
-        this.chatRoomService.onCreate(createOptions);
+         this.setState(new ChatRoomState());
+         this.chatRoomService = new ChatRoomService(this, createOptions.lobby);
+         this.chatRoomService.onCreate(createOptions);
 
-        this.onMessage("*", (client, type, message) => {
-            this.handleMessage(client, type as ChatRoomRequest, message);
-        });
+         this.onMessage("*", (client, type, message) => {
+             this.handleMessage(client, type as ChatRoomRequest, message);
+         });
+
      }
 
     private handleMessage(client: Client, type: ChatRoomRequest, message: any) {
@@ -35,16 +33,23 @@ export class ChatRoom extends Room<ChatRoomState> {
         switch (type) {
             default:
                 console.log(`Unknown message type: ${type}`);
-
         }
     }
 
-    async onJoin(client: Client, options: any) {
-        await this.chatRoomService.onJoin(client, options);
+    onJoin(client: Client, options: any) {
+         try {
+             this.chatRoomService.onJoin(client, options);
+         } finally {
+             this.chatRoomService.syncLobbyState();
+         }
     }
 
     onLeave(client: Client) {
-        this.chatRoomService.onLeave(client);
+         try {
+             this.chatRoomService.onLeave(client);
+         } finally {
+             this.chatRoomService.syncLobbyState();
+         }
     }
 
     async onDispose() {

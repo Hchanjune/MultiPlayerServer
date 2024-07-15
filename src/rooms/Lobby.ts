@@ -23,16 +23,16 @@ export enum LobbyResponse {
 
 export class Lobby extends Room<LobbyState> {
 
-    private lobbyService: LobbyService;
+    private lobbyService!: LobbyService;
 
-    constructor() {
-        super();
+    onCreate(options: any) {
         this.setState(new LobbyState());
         this.lobbyService = new LobbyService(this);
 
         this.onMessage("*", (client, type, message) => {
             this.handleMessage(client, type as LobbyRequest, message);
         });
+        console.log(`[Lobby] Created`);
     }
 
     private handleMessage(client: Client, type: LobbyRequest, message: any) {
@@ -53,9 +53,7 @@ export class Lobby extends Room<LobbyState> {
 
 
 
-    onCreate(options: any) {
-        console.log(`[Lobby] Created`);
-    }
+
 
     onJoin(client: Client, loginOption: LobbyLoginOption) {
         this.lobbyService.onLogin(client, loginOption);
