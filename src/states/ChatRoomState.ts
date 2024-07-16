@@ -1,6 +1,6 @@
-import {MapSchema, Schema, type} from "@colyseus/schema";
+import {ArraySchema, MapSchema, Schema, type} from "@colyseus/schema";
 import {ChatRoomPlayer} from "../schemas/chatRoom/ChatRoomPlayer";
-import {ChatRoomInfo} from "../schemas/globals/ChatRoomInfo";
+import {ClientInfo} from "../schemas/globals/ClientInfo";
 
 
 export class ChatRoomState extends Schema {
@@ -17,7 +17,114 @@ export class ChatRoomState extends Schema {
     @type("string")
     password = "";
     @type({ map : ChatRoomPlayer })
-    players= new MapSchema<ChatRoomPlayer>();
+    chatRoomPlayers = new MapSchema<ChatRoomPlayer>();
+    @type( { array : ChatRoomPlayer})
+    redTeam = new ArraySchema<ChatRoomPlayer>();
+    @type( { array : ChatRoomPlayer})
+    blackTeam = new ArraySchema<ChatRoomPlayer>();
     @type("boolean")
     isPlaying = false;
+
+
+    addChatRoomPlayer(key: string, clientInfo: ClientInfo): ChatRoomPlayer {
+        try {
+            const player = new ChatRoomPlayer().assign({
+                lobbySessionId: clientInfo.sessionId,
+                sessionId: key,
+                id: clientInfo.id,
+                name: clientInfo.name
+            });
+            this.chatRoomPlayers.set(key, player);
+            return player;
+        } catch (error) {
+            console.error("Error adding player:", error);
+            throw error;
+        }
+    }
+
+    removeChatRoomPlayer(key: string) {
+        this.removePlayerFromCurrentTeam(this.chatRoomPlayers.get(key)!);
+        return this.chatRoomPlayers.delete(key);
+    }
+
+    autoSetPlayerTeam(player: ChatRoomPlayer) {
+        if (this.redTeam.length <= this.blackTeam.length) {
+            this.redTeam.push(player);
+            player.team = "RED";
+        } else {
+            this.blackTeam.push(player);
+            player.team = "BLACK";
+        }
+    }
+
+    setPlayerTeam(player: ChatRoomPlayer, teamColor: string) {
+        this.removePlayerFromCurrentTeam(player);
+
+        switch (teamColor) {
+            case "RED":
+                if (this.redTeam.length < 5) {
+                    this.redTeam.push(player);
+                    player.team = "RED";
+                } else {
+                    throw new Error("Red team is full");
+                }
+                break;
+            case "BLACK":
+                if (this.blackTeam.length < 5) {
+                    this.blackTeam.push(player);
+                    player.team = "BLACK";
+                } else {
+                    throw new Error("Black team is full");
+                }
+                break;
+            default:
+                throw new Error("Invalid team color");
+        }
+    }
+
+    changePlayerTeam(player: ChatRoomPlayer, newTeamColor: string) {
+        if (player.team === newTeamColor) {
+            throw new Error(`Player is already in the ${newTeamColor} team`);
+        }
+
+        this.removePlayerFromCurrentTeam(player);
+
+        switch (newTeamColor) {
+            case "RED":
+                if (this.redTeam.length < 5) {
+                    this.redTeam.push(player);
+                    player.team = "RED";
+                } else {
+                    throw new Error("Red team is full");
+                }
+                break;
+            case "BLACK":
+                if (this.blackTeam.length < 5) {
+                    this.blackTeam.push(player);
+                    player.team = "BLACK";
+                } else {
+                    throw new Error("Black team is full");
+                }
+                break;
+            default:
+                throw new Error("Invalid team color");
+        }
+    }
+
+    removePlayerFromCurrentTeam(player: ChatRoomPlayer) {
+        if (player.team === "RED") {
+            const index = this.redTeam.findIndex(p => p.sessionId === player.sessionId);
+            if (index !== -1) {
+                this.redTeam.splice(index, 1);
+            }
+        } else if (player.team === "BLACK") {
+            const index = this.blackTeam.findIndex(p => p.sessionId === player.sessionId);
+            if (index !== -1) {
+                this.blackTeam.splice(index, 1);
+            }
+        }
+        player.team = "";
+    }
+
+
 }

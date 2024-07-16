@@ -2,14 +2,6 @@ import {Client, Room} from "colyseus";
 import {LobbyState} from "../states/LobbyState";
 import {LobbyService} from "../services/lobby/LobbyService";
 import {LobbyLoginOption} from "../options/lobby/LobbyLoginOption";
-import {AsyncEventEmitter} from "../utils/AsyncEventEmitter";
-import {ChatRoomInfo} from "../schemas/globals/ChatRoomInfo";
-
-export enum LobbyEvent {
-    GET_CLIENT_INFO = "GET_CLIENT_INFO",
-    CHAT_ROOM_UPDATED = "CHAT_ROOM_UPDATED",
-    CHAT_ROOM_DISPOSED = "CHAT_ROOM_DISPOSED",
-}
 
 export enum LobbyRequest {
     CREATE_ACCOUNT = "CREATE_ACCOUNT",
@@ -31,33 +23,17 @@ export enum LobbyResponse {
 
 export class Lobby extends Room<LobbyState> {
 
-    private lobbyService: LobbyService;
-    public eventEmitter: AsyncEventEmitter;
+    private lobbyService!: LobbyService;
 
-    constructor() {
-        super();
+
+    onCreate(options: any) {
         this.setState(new LobbyState());
-        this.eventEmitter = new AsyncEventEmitter();
         this.lobbyService = new LobbyService(this);
-
+        this.setPatchRate(1);
         this.onMessage("*", (client, type, message) => {
             this.handleMessage(client, type as LobbyRequest, message);
         });
-
-        this.eventEmitter.on(LobbyEvent.GET_CLIENT_INFO, async (sessionId: string, resolve: Function) => {
-            console.log(`[Lobby] Received Event of type ${LobbyEvent.GET_CLIENT_INFO}`);
-            const clientInfo = await this.lobbyService.returnClientInfo(sessionId);
-            resolve(clientInfo);
-        });
-
-        this.eventEmitter.on(LobbyEvent.CHAT_ROOM_DISPOSED, (roomId: string) => {
-            console.log(`[Lobby] Received Event of type ${LobbyEvent.CHAT_ROOM_DISPOSED}`);
-            this.lobbyService.onChatRoomDispose(roomId);
-        });
-
-        this.eventEmitter.on(LobbyEvent.CHAT_ROOM_UPDATED, (chatRoomInfo: ChatRoomInfo) => {
-            this.lobbyService.onChatRoomUpdate(chatRoomInfo);
-        });
+        console.log(`[Lobby] Created`);
     }
 
     private handleMessage(client: Client, type: LobbyRequest, message: any) {
@@ -78,9 +54,7 @@ export class Lobby extends Room<LobbyState> {
 
 
 
-    onCreate(options: any) {
-        console.log(`[Lobby] Created`);
-    }
+
 
     onJoin(client: Client, loginOption: LobbyLoginOption) {
         this.lobbyService.onLogin(client, loginOption);

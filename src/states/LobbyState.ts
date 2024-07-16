@@ -1,5 +1,6 @@
 import {MapSchema, Schema, type} from "@colyseus/schema";
 import {ClientInfo} from "../schemas/globals/ClientInfo";
+import {ChatRoomState} from "./ChatRoomState";
 import {ChatRoomInfo} from "../schemas/globals/ChatRoomInfo";
 
 

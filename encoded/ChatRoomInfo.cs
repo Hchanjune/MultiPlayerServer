@@ -27,8 +27,8 @@ public partial class ChatRoomInfo : Schema {
 	[Type(5, "string")]
 	public string password = default(string);
 
-	[Type(6, "map", typeof(MapSchema<ChatRoomPlayer>))]
-	public MapSchema<ChatRoomPlayer> players = new MapSchema<ChatRoomPlayer>();
+	[Type(6, "uint8")]
+	public byte currentPlayers = default(byte);
 
 	[Type(7, "boolean")]
 	public bool isPlaying = default(bool);
@@ -109,15 +109,15 @@ public partial class ChatRoomInfo : Schema {
 		};
 	}
 
-	protected event PropertyChangeHandler<MapSchema<ChatRoomPlayer>> __playersChange;
-	public Action OnPlayersChange(PropertyChangeHandler<MapSchema<ChatRoomPlayer>> __handler, bool __immediate = true) {
+	protected event PropertyChangeHandler<byte> __currentPlayersChange;
+	public Action OnCurrentPlayersChange(PropertyChangeHandler<byte> __handler, bool __immediate = true) {
 		if (__callbacks == null) { __callbacks = new SchemaCallbacks(); }
-		__callbacks.AddPropertyCallback(nameof(this.players));
-		__playersChange += __handler;
-		if (__immediate && this.players != null) { __handler(this.players, null); }
+		__callbacks.AddPropertyCallback(nameof(this.currentPlayers));
+		__currentPlayersChange += __handler;
+		if (__immediate && this.currentPlayers != default(byte)) { __handler(this.currentPlayers, default(byte)); }
 		return () => {
-			__callbacks.RemovePropertyCallback(nameof(players));
-			__playersChange -= __handler;
+			__callbacks.RemovePropertyCallback(nameof(currentPlayers));
+			__currentPlayersChange -= __handler;
 		};
 	}
 
@@ -141,7 +141,7 @@ public partial class ChatRoomInfo : Schema {
 			case nameof(maxClients): __maxClientsChange?.Invoke((byte) change.Value, (byte) change.PreviousValue); break;
 			case nameof(isPrivate): __isPrivateChange?.Invoke((bool) change.Value, (bool) change.PreviousValue); break;
 			case nameof(password): __passwordChange?.Invoke((string) change.Value, (string) change.PreviousValue); break;
-			case nameof(players): __playersChange?.Invoke((MapSchema<ChatRoomPlayer>) change.Value, (MapSchema<ChatRoomPlayer>) change.PreviousValue); break;
+			case nameof(currentPlayers): __currentPlayersChange?.Invoke((byte) change.Value, (byte) change.PreviousValue); break;
 			case nameof(isPlaying): __isPlayingChange?.Invoke((bool) change.Value, (bool) change.PreviousValue); break;
 			default: break;
 		}
