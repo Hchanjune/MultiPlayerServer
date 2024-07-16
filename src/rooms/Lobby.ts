@@ -25,10 +25,11 @@ export class Lobby extends Room<LobbyState> {
 
     private lobbyService!: LobbyService;
 
+
     onCreate(options: any) {
         this.setState(new LobbyState());
         this.lobbyService = new LobbyService(this);
-
+        this.setPatchRate(1);
         this.onMessage("*", (client, type, message) => {
             this.handleMessage(client, type as LobbyRequest, message);
         });

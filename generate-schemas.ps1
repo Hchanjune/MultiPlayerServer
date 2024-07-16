@@ -11,5 +11,6 @@ if (-Not (Test-Path -Path $outputDir)) {
 Get-ChildItem -Path $sourceDir -Filter "*State.ts" -Recurse | ForEach-Object {
     $file = $_.FullName
     $filename = [System.IO.Path]::GetFileNameWithoutExtension($file)
-    schema-codegen $file --output "$outputDir\$filename.cs" --csharp
+    # 출력 경로를 단일 디렉터리로 설정
+    schema-codegen $file --output "$outputDir" --csharp
 }

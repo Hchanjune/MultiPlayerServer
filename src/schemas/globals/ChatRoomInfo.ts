@@ -1,5 +1,4 @@
 import {MapSchema, Schema, type} from "@colyseus/schema";
-import {ChatRoomPlayer} from "../chatRoom/ChatRoomPlayer";
 
 
 export class ChatRoomInfo extends Schema {
@@ -15,8 +14,8 @@ export class ChatRoomInfo extends Schema {
     isPrivate = false;
     @type("string")
     password = "";
-    @type({ map : ChatRoomPlayer })
-    players= new MapSchema<ChatRoomPlayer>();
+    @type("uint8")
+    currentPlayers = 0;
     @type("boolean")
     isPlaying = false;
 }

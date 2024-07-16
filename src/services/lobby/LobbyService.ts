@@ -57,6 +57,7 @@ export class LobbyService {
                 client.send(LobbyResponse.ERROR_MESSAGE, "유효하지 않은 요청입니다.");
                 return;
             }
+            option.initialOwner = this.state.clients.get(client.sessionId)!.id;
             option.lobby = this.lobby;
             const chatRoom = await matchMaker.createRoom('ChatRoom', option);
             const seatReservation = await matchMaker.joinById(chatRoom.roomId, this.state.clients.get(client.sessionId));
@@ -78,7 +79,7 @@ export class LobbyService {
                 }
             }
 
-            if (targetRoom.state.players.size >= targetRoom.state.maxClients) {
+            if (targetRoom.state.chatRoomPlayers.size >= targetRoom.state.maxClients) {
                 client.send(LobbyResponse.CHAT_ROOM_FULL, "현재 자리가 없습니다.");
                 return;
             }
@@ -90,17 +91,6 @@ export class LobbyService {
         } catch (error) {
             console.error(`Error during chat room join request: ${error}`);
             client.send(LobbyResponse.ERROR_MESSAGE, `방에 참여할 수 없습니다 - ${error}`);
-        }
-    }
-
-
-    onChatRoomDispose(roomId: string) {
-        if (this.state.chatRooms.has(roomId)) {
-            this.state.chatRooms.delete(roomId);
-            console.log(`[Lobby] ChatRoom(${roomId}) Disposed`);
-            console.log(`[Lobby] Currently [${this.state.chatRooms.size}] ChatRoom Active In The Lobby`);
-        } else {
-            console.error(`[Lobby] ChatRoom(${roomId}) Does Not Exist`);
         }
     }
 
