@@ -72,16 +72,16 @@ export class LobbyService {
         try {
             let targetRoom = await matchMaker.getRoomById(options.roomId) as ChatRoom;
 
+            if (targetRoom.state.chatRoomPlayers.size >= targetRoom.state.maxClients) {
+                client.send(LobbyResponse.CHAT_ROOM_FULL, "참여가능 인원 수를 초과 하였습니다.");
+                return;
+            }
+
             if (targetRoom.state.isPrivate) {
                 if (targetRoom.state.password !== options.password) {
                     client.send(LobbyResponse.CHAT_ROOM_PASSWORD_ERROR, "비밀번호가 일치하지 않습니다.");
                     return;
                 }
-            }
-
-            if (targetRoom.state.chatRoomPlayers.size >= targetRoom.state.maxClients) {
-                client.send(LobbyResponse.CHAT_ROOM_FULL, "현재 자리가 없습니다.");
-                return;
             }
 
             // 클라이언트 세션 ID로 시트 예약

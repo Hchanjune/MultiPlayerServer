@@ -47,6 +47,20 @@ export class ChatRoomState extends Schema {
         return this.chatRoomPlayers.delete(key);
     }
 
+    selectChatRoomPlayerByKey(key: string): ChatRoomPlayer {
+        return this.chatRoomPlayers.get(key)!;
+    }
+
+    selectChatRoomPlayerById(id: string): ChatRoomPlayer | undefined {
+        let targetPlayer: ChatRoomPlayer | undefined;
+        this.chatRoomPlayers.forEach((player, key) => {
+            if (player.id === id) {
+                targetPlayer = player;
+            }
+        });
+        return targetPlayer;
+    }
+
     autoSetPlayerTeam(player: ChatRoomPlayer) {
         if (this.redTeam.length <= this.blackTeam.length) {
             this.redTeam.push(player);
@@ -62,7 +76,7 @@ export class ChatRoomState extends Schema {
 
         switch (teamColor) {
             case "RED":
-                if (this.redTeam.length < 5) {
+                if (this.redTeam.length < this.maxClients/2) {
                     this.redTeam.push(player);
                     player.team = "RED";
                 } else {
@@ -70,7 +84,7 @@ export class ChatRoomState extends Schema {
                 }
                 break;
             case "BLACK":
-                if (this.blackTeam.length < 5) {
+                if (this.blackTeam.length < this.maxClients/2) {
                     this.blackTeam.push(player);
                     player.team = "BLACK";
                 } else {
@@ -82,31 +96,35 @@ export class ChatRoomState extends Schema {
         }
     }
 
-    changePlayerTeam(player: ChatRoomPlayer, newTeamColor: string) {
+    changePlayerTeam(player: ChatRoomPlayer, newTeamColor: string): boolean {
         if (player.team === newTeamColor) {
-            throw new Error(`Player is already in the ${newTeamColor} team`);
+            console.log(`Player is already in the ${newTeamColor} team`);
+            return false;
         }
 
         this.removePlayerFromCurrentTeam(player);
 
         switch (newTeamColor) {
             case "RED":
-                if (this.redTeam.length < 5) {
+                if (this.redTeam.length < this.maxClients/2) {
                     this.redTeam.push(player);
                     player.team = "RED";
+                    return true;
                 } else {
+                    return false;
                     throw new Error("Red team is full");
                 }
-                break;
             case "BLACK":
-                if (this.blackTeam.length < 5) {
+                if (this.blackTeam.length < this.maxClients/2) {
                     this.blackTeam.push(player);
                     player.team = "BLACK";
+                    return true;
                 } else {
+                    return false;
                     throw new Error("Black team is full");
                 }
-                break;
             default:
+                return false;
                 throw new Error("Invalid team color");
         }
     }
@@ -127,4 +145,13 @@ export class ChatRoomState extends Schema {
     }
 
 
+    isAllPlayersReady() {
+        let allReady = true;
+        this.chatRoomPlayers.forEach((player, key) => {
+            if (player.id !== this.roomOwner && !player.isReady) {
+                allReady = false;
+            }
+        });
+        return allReady;
+    }
 }

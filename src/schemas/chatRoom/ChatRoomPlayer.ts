@@ -11,4 +11,6 @@ export class ChatRoomPlayer extends Schema {
     name: string = "";
     @type("string")
     team: string = "";
+    @type("boolean")
+    isReady: boolean = false;
 }

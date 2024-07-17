@@ -7,18 +7,23 @@ import {ChatRoomPlayer} from "../schemas/chatRoom/ChatRoomPlayer";
 import {ChatQueue} from "../schemas/chatRoom/ChatQueue";
 
 export enum ChatRoomRequest {
-    OPTION_CONFIG = "OPTION_CONFIG",
+    ROOM_CONFIG = "ROOM_CONFIG",
     CHAT_REQUEST = "CHAT_REQUEST",
     TEAM_CHANGE_REQUEST = "TEAM_CHANGE_REQUEST",
+    START = "START",
+    READY = "READY",
+    CANCEL_READY = "CANCEL_READY"
 }
 
 export enum ChatRoomResponse {
+    ROOM_CONFIG_SUCCESS = "ROOM_CONFIG_SUCCESS",
+    ROOM_CONFIG_FAILURE = "ROOM_CONFIG_FAILURE",
     PLAYER_JOINED = "PLAYER_JOINED",
     PLAYER_LEAVED = "PLAYER_LEAVED",
     OWNER_CHANGED = "OWNER_CHANGED",
     ECHO_CHAT_MESSAGE = "ECHO_CHAT_MESSAGE",
-    TEAM_CHANGED = "TEAM_CHANGED",
-    TEAM_CHANGE_UNAVAILABLE = "TEAM_CHANGE_UNAVAILABLE",
+    READY_TO_START = "READY_TO_START",
+    START_CANCELED = "START_CANCELED",
 }
 
 export class ChatRoom extends Room<ChatRoomState> {
@@ -32,17 +37,32 @@ export class ChatRoom extends Room<ChatRoomState> {
          this.chatRoomService = new ChatRoomService(this, createOptions.lobby);
          this.chatRoomService.onCreate(createOptions);
 
-         this.onMessage("*", (client, type, message) => {
-             this.handleMessage(client, type as ChatRoomRequest, message);
+         this.onMessage("*", async (client, type, message) => {
+             await this.handleMessage(client, type as ChatRoomRequest, message);
          });
 
      }
 
-    private handleMessage(client: Client, type: ChatRoomRequest, message: any) {
+    private async handleMessage(client: Client, type: ChatRoomRequest, message: any) {
         //console.log(`[${this.state.roomName}] Received message of type ${type} from ${this.state.chatRoomPlayers.get(client.sessionId)?.id}:`, message);
         switch (type) {
+            case ChatRoomRequest.ROOM_CONFIG:
+                await this.chatRoomService.configChatRoom(client, message);
+                break;
             case ChatRoomRequest.CHAT_REQUEST:
                 this.chatRoomService.onChatReceived(client, message);
+                break;
+            case ChatRoomRequest.TEAM_CHANGE_REQUEST:
+                this.chatRoomService.onTeamChangeRequest(client, message);
+                break;
+            case ChatRoomRequest.START:
+                await this.chatRoomService.onStartRequest(client);
+                break;
+            case ChatRoomRequest.READY:
+                this.chatRoomService.onReadyRequest(client);
+                break;
+            case ChatRoomRequest.CANCEL_READY:
+                this.chatRoomService.onCancelReadyRequest(client);
                 break;
             default:
                 console.log(`Unknown message type: ${type}`);
